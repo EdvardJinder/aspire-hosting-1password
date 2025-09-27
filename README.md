@@ -11,7 +11,7 @@ var somefield = builder.AddOnePasswordField(
     // Optional: accountId: string
     );
 
-var someProject = bulder.AddProject<Projects.SomeProject>("someproject")
+var someProject = builder.AddProject<Projects.SomeProject>("someproject")
     .WithEnvironment("SOME__ENVIRONMENT__VARIABLE__NAME", somefield);
 
 ```
