@@ -5,6 +5,7 @@ Hosting integration for retrieving fields from 1Password with Aspire.
 ```csharp
 
 var somefield = builder.AddOnePasswordField(
+    "somefield", // For aspire
     "MyVault",
     "MyItem",
     "somefield"
