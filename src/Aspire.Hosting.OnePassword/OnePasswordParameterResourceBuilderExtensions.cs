@@ -35,6 +35,7 @@ public static class OnePasswordParameterResourceBuilderExtensions
     }
     public static IResourceBuilder<OnePasswordFieldResource> AddOnePasswordField(
        this IDistributedApplicationBuilder builder,
+       [ResourceName] string name,
        string vaultId,
        string itemId,
        string field,
@@ -45,12 +46,6 @@ public static class OnePasswordParameterResourceBuilderExtensions
         ArgumentNullException.ThrowIfNull(vaultId);
         ArgumentNullException.ThrowIfNull(itemId);
         ArgumentNullException.ThrowIfNull(field);
-
-        var name = $"onepassword-{vaultId}-{itemId}-{field}"
-            .ToLowerInvariant()
-            .Replace(" ", "", StringComparison.InvariantCulture)
-            .Replace("_", "", StringComparison.InvariantCulture)
-            .Replace(".", "", StringComparison.InvariantCulture);
 
         // Add services
         builder.Services.TryAddSingleton<OnePasswordCliInstallationManager>();
