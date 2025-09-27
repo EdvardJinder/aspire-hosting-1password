@@ -12,7 +12,7 @@ var somefield = builder.AddOnePasswordField(
     );
 
 var someProject = bulder.AddProject<Projects.SomeProject>("someproject")
-  .WithEnvironment("SOME__ENVIRONMENT__VARIABLE__NAME", somefield);
+    .WithEnvironment("SOME__ENVIRONMENT__VARIABLE__NAME", somefield);
 
 ```
 
