@@ -27,20 +27,9 @@ internal sealed class OnePasswordCli
 
         _cliPath = filePath;
     }
-    public Task<int> UserSignInAsync(string? accountId = null, ILogger? logger = default, CancellationToken cancellationToken = default)
+    internal Task<int> GetFieldValue(string? accountId, string vaultId, string itemId, string field, TextWriter? outputWriter = null, TextWriter? errorWriter = null, ILogger? logger = default, CancellationToken cancellationToken = default)
     {
-        List<string> args = ["signin"];
-        if (accountId is not null)
-        {
-            args.Add("--account");
-            args.Add(accountId);
-        }
-        return RunAsync([.. args], null, null, logger, cancellationToken);
-    }
-    public Task<int> GetUserSignInStatus(TextWriter? outputWriter = null, TextWriter? errorWriter = null, string? accountId = null, ILogger? logger = default, CancellationToken cancellationToken = default)
-    //=> RunAsync(["user", "show", "--json", "--nologo"], outputWriter, errorWriter, logger, cancellationToken);
-    {
-        List<string> args = ["signin"];
+        List<string> args = ["read", $"op://{vaultId}/{itemId}/{field}"];
         if (accountId is not null)
         {
             args.Add("--account");
@@ -221,4 +210,6 @@ internal sealed class OnePasswordCli
             }
         }
     }
+
+    
 }
