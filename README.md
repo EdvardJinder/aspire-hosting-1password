@@ -1,4 +1,4 @@
-# Aspire.Hosting.OnePassword
+# 1Password Hosting integration for .NET Aspire
 
 Hosting integration for retrieving fields from 1Password with Aspire.
 
