@@ -59,6 +59,7 @@ public static class OnePasswordParameterResourceBuilderExtensions
                 var logger = e.Services.GetRequiredService<ResourceLoggerService>().GetLogger(onePasswordResource);
                 var eventing = e.Services.GetRequiredService<IDistributedApplicationEventing>();
                 var notificationService = e.Services.GetRequiredService<ResourceNotificationService>();
+                var interactionService = e.Services.GetRequiredService<IInteractionService>();   
                 var onePasswordCliInstallationManager = e.Services.GetRequiredService<OnePasswordCliInstallationManager>();
                 var onePasswordClient = e.Services.GetRequiredService<IOnePasswordClient>();
                 // Ensure CLI is available
@@ -80,11 +81,28 @@ public static class OnePasswordParameterResourceBuilderExtensions
 
                         field = await onePasswordClient.GetFieldAsync(onePasswordResource.AccountId, onePasswordResource.VaultId, onePasswordResource.ItemId, onePasswordResource.Field, logger, ct).ConfigureAwait(false);
 
-                        if (SecretsStore.TrySetUserSecret(assembly, onePasswordResource.ConfigurationKey, field))
-                        {
-                            logger.LogWarning("Could not set field in user secrets. Ensure the assembly has a UserSecretsIdAttribute.");
-                        }
+                        var storeInUserSecrets = await interactionService.PromptMessageBoxAsync("Store in User Secrets?",
+                            $"""
+                            **The value for the field** `{onePasswordResource.Field}` **from item** `{onePasswordResource.ItemId}` **in vault** `{onePasswordResource.VaultId}` **has been retrieved successfully.**
 
+                            Would you like to store the retrieved value in **User Secrets** for future use?
+                            """,
+                            new MessageBoxInteractionOptions
+                            {
+                                ShowSecondaryButton = true,
+                                PrimaryButtonText = "Yes",
+                                SecondaryButtonText = "No",
+                                EnableMessageMarkdown = true
+                            }, ct
+                            );
+
+                        if (storeInUserSecrets.Data)
+                        {
+                            if (!SecretsStore.TrySetUserSecret(assembly, onePasswordResource.ConfigurationKey, field))
+                            {
+                                logger.LogWarning("Could not set field in user secrets. Ensure the assembly has a UserSecretsIdAttribute.");
+                            }
+                        }
                     }
 
                     if (field is null)

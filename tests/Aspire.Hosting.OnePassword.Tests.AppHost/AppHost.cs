@@ -2,18 +2,22 @@ using Aspire.Hosting.OnePassword;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
+string? accountId = builder.Configuration["1PASSWORD__ACCOUNT__ID"];
+
 var username = builder.AddOnePasswordField(
     "username",
     "Developer",
     "Aspire - OnePassword - Test",
-    "username"
+    "username",
+    accountId: accountId
     );
 
 var credential = builder.AddOnePasswordField(
     "credential",
     "Developer",
     "Aspire - OnePassword - Test",
-    "credential"
+    "credential",
+    accountId: accountId
     );
 
 
