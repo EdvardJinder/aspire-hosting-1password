@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-
+using OnePassword.Cli.Sdk;
 
 namespace Aspire.Hosting.OnePassword;
 
@@ -47,7 +47,7 @@ internal sealed class OnePasswordCliInstallationManager : RequiredCommandValidat
     /// <throws cref="DistributedApplicationException">Thrown if the devtunnel CLI is not found.</throws>
     public Task EnsureInstalledAsync(CancellationToken cancellationToken = default) => RunAsync(cancellationToken);
 
-    protected override string GetCommandPath() => OnePasswordCli.GetCliPath();
+    protected override string GetCommandPath() => IOnePasswordClient.GetCliPath();
 
     protected internal override async Task<(bool IsValid, string? ValidationMessage)> OnResolvedAsync(string resolvedCommandPath, CancellationToken cancellationToken)
     {

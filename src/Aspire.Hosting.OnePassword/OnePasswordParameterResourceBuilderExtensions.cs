@@ -5,6 +5,7 @@ using Aspire.Hosting.Eventing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using OnePassword.Cli.Sdk;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -49,7 +50,7 @@ public static class OnePasswordParameterResourceBuilderExtensions
 
         // Add services
         builder.Services.TryAddSingleton<OnePasswordCliInstallationManager>();
-        builder.Services.TryAddSingleton<IOnePasswordClient, OnePasswordCliClient>();
+        builder.Services.TryAdd1PasswordCliServices();
 
         var onePasswordResource = new OnePasswordFieldResource(name, accountId, vaultId, itemId, field);
 

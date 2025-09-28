@@ -1,23 +1,13 @@
 ﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
-
-namespace Aspire.Hosting.OnePassword;
-
+namespace OnePassword.Cli.Sdk;
 internal sealed class OnePasswordCli
 {
     private readonly string _cliPath;
-    public static string GetCliPath() => "op";
-
     public OnePasswordCli(string filePath)
     {
         if (string.IsNullOrWhiteSpace(filePath))

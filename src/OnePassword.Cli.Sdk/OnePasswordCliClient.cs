@@ -1,16 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Logging;
 
 
-namespace Aspire.Hosting.OnePassword;
-
+namespace OnePassword.Cli.Sdk;
 internal sealed class OnePasswordCliClient : IOnePasswordClient
 {
-    private readonly OnePasswordCli _cli = new(OnePasswordCli.GetCliPath());
+    private readonly OnePasswordCli _cli = new(IOnePasswordClient.GetCliPath());
     public async Task<string> GetFieldAsync(string? accountId, string vaultId, string itemId, string field, ILogger? logger = null, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(vaultId);
@@ -21,7 +15,7 @@ internal sealed class OnePasswordCliClient : IOnePasswordClient
           (ow, ew, logger, ct) => _cli.GetFieldValue(accountId, vaultId, itemId, field, ow, ew, logger, ct),
           logger, cancellationToken).ConfigureAwait(false);
 
-        return value ?? throw new DistributedApplicationException($"Failed to get field '{field}' from item '{itemId}' in vault '{vaultId}' (account '{accountId}'). Exit code {exitCode}: {error}");
+        return value ?? throw new OnePasswordCliException($"Failed to get field '{field}' from item '{itemId}' in vault '{vaultId}' (account '{accountId}'). Exit code {exitCode}: {error}");
     }
 
     private async Task<(string? Result, int ExitCode, string? Error)> CallCliAsync(Func<TextWriter, TextWriter, ILogger?, CancellationToken, Task<int>> cliCall, ILogger? logger = default, CancellationToken cancellationToken = default)
